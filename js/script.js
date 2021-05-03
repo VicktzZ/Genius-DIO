@@ -12,27 +12,42 @@ const red = document.querySelector('.red');
 const green = document.querySelector('.green');
 const yellow = document.querySelector('.yellow');
 
+let elementColor
+let j = 0
+let fineshed
+
 //cria ordem aletoria de cores
 let shuffleOrder = () => {
     let colorOrder = Math.floor(Math.random() * 4);
     order[order.length] = colorOrder;
     clickedOrder = [];
 
-    for(let i in order) {
-        let elementColor = createColorElement(order[i]);
-        lightColor(elementColor, Number(i) + 1);
-    }
 }
 
+setInterval(() =>{
+
+    if(fineshed == true){
+        
+        elementColor = createColorElement(order[j]);
+        lightColor(elementColor)
+        
+        if(j < order.length - 1){
+            j++
+            fineshed = true
+        }
+    
+    }
+}, 1200)
+
 //acende a proxima cor
-let lightColor = (element, number) => {
-    number = number * 500;
+let lightColor = (element) => {
+    fineshed = false
     setTimeout(() => {
         element.classList.add('selected');
-    }, number - 250);
-    setTimeout(() => {
-        element.classList.remove('selected');
-    });
+        setTimeout(() => {
+            element.classList.remove('selected');
+        }, 500);
+    }, 1000);
 }
 
 //checa se os botoes clicados são os mesmos da ordem gerada no jogo
@@ -57,7 +72,7 @@ let click = (color) => {
     setTimeout(() => {
         createColorElement(color).classList.remove('selected');
         checkOrder();
-    },250);
+    },500);
 }
 
 //funcao que retorna a cor
@@ -75,6 +90,8 @@ let createColorElement = (color) => {
 
 //funcao para proximo nivel do jogo
 let nextLevel = () => {
+    j = 0
+    fineshed = true
     score++;
     shuffleOrder();
 }
@@ -92,6 +109,8 @@ let gameOver = () => {
 let playGame = () => {
     alert('Bem vindo ao Genius! Iniciando novo jogo!');
     score = 0;
+    fineshed = true
+    j = 0
 
     nextLevel();
 }
